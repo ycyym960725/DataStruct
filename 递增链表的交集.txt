@@ -1,0 +1,77 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define JUG int
+#define LEN sizeof(Node)
+typedef struct node Node;
+struct node{
+	int number;
+	Node *next;
+};
+Node *Create(int n){
+	Node *head, *tail, *pb;
+	int count=0;
+	head =(Node *)malloc(LEN);
+	head->next = NULL;
+	pb = head;
+	tail = pb;
+	printf("\n请初始化节点，按回车结束!\n");
+	while (count<n){
+		pb = (Node*)malloc(LEN);
+		scanf_s("%d", &(pb->number));
+		pb->next = NULL;
+		tail->next=pb;
+		tail = pb;
+		count++;
+	}
+	printf("\n初始化成功!\n");
+	return head;
+}
+void Show_List(Node *L){
+	Node *head,*pb;
+	head = L;
+	pb = head->next;
+	if (head->next==NULL){
+		printf("\n该表为空表!\n");
+	}
+	while (pb!=NULL){
+		printf("\t%d", pb->number);
+		pb = pb->next;
+	}
+	printf("\n");
+}
+Node *Merge_List(Node *L1,Node *L2){
+	Node *Pa, *Pb, *Pc;
+	Pa = L1->next;
+	Pb = L2->next;
+	Pc = L1;
+	while (Pa&&Pb){
+		if (Pa->number<Pb->number){
+			Pa = Pa->next;
+		}
+		else if (Pa->number==Pb->number){
+			Pc->next = Pa;
+			Pc = Pc->next;
+			Pa = Pa->next;
+			Pb = Pb->next;
+		}
+		else{
+			Pb = Pb->next;
+		}
+	}
+	Pc->next = NULL;
+	return L1;
+}
+void main(){
+	Node *L1= NULL,*L2=NULL,*L3=NULL;
+	int node_count;
+	printf("\n请输入节点数量并按照升序序列初始化链表A!\n");
+	scanf_s("%d", &node_count);
+	L1= Create(node_count);
+	Show_List(L1);
+	printf("\n请输入节点数量并按照升序序列初始化链表B!\n");
+	scanf_s("%d", &node_count);
+	L2 = Create(node_count);
+	Show_List(L2);
+	L3 = Merge_List(L1, L2);
+	Show_List(L3);
+}
