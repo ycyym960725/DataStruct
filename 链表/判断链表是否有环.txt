@@ -1,0 +1,81 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define JUG int
+#define LEN sizeof(Node)
+typedef struct node Node;
+struct node{
+	int number;
+	Node *next;
+};
+Node *Create_CirCle_List(int n){
+	Node *head=NULL, *pb,*s;
+	int node_nums =1;
+	head = (Node*)malloc(LEN);
+	head->next = head;
+	pb = head;
+	s = pb;
+	while (node_nums<=n){
+		pb = (Node*)malloc(LEN);
+		pb->number = node_nums++;
+		s->next = pb;
+		pb->next = head;
+		s = pb;
+	}
+	printf("\n有环链表初始化成功!\n");
+	return head;
+}
+Node *Create_Normal_List(int n){
+	Node *head = NULL, *pb, *s;
+	int node_nums = 1;
+	head = (Node*)malloc(LEN);
+	head->next =NULL;
+	pb = head;
+	s = pb;
+	while (node_nums <= n){
+		pb = (Node*)malloc(LEN);
+		pb->number = node_nums++;
+		s->next = pb;
+		pb->next =NULL;
+		s = pb;
+	}
+	printf("\n无环链表初始化成功!\n");
+	return head;
+}
+JUG Has_Circle(Node *L){
+	int pb_count =0;
+	Node *head = NULL,*pf,*pb;
+	head = L;
+	pb = head;
+	while (pb->next){
+		pb = pb->next;
+		pb_count++;
+		int pf_count = 0;
+		Node *pf = head;
+		while (pf!=pb->next&&pf_count<=pb_count){
+			pf = pf->next;
+			pf_count++;
+		}
+		if (pf==pb->next&&pf_count<=pb_count){
+			return 1;
+		}
+
+	}
+	if (pb->next==NULL)return 0;
+}
+void main(){
+	Node *L1=NULL, *L2=NULL;
+	L1 = Create_CirCle_List(2);
+	Node *head = L1;
+	Node *p = head;
+	while (p->next!=head){
+		p = p->next;
+	}//取得最后一个节点
+	p->next = head->next->next;
+	L2 = Create_Normal_List(2);
+	if (Has_Circle(head)){
+		printf("\n有环\n");
+	}
+	if (!Has_Circle(L2)){
+		printf("\n无环\n");
+	}
+}

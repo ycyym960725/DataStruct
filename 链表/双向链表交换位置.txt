@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define LEN1 sizeof(DuLNode)
+typedef struct node1 DuLNode;
+struct node1{
+	int data;
+	DuLNode *prior;
+	DuLNode *next;
+}*DuLinkList;
+DuLNode *init_double_List(){
+	DuLNode *head,*pb,*L,*tail;
+	L = (DuLNode*)malloc(LEN1);
+	head = L;
+	tail = L;
+	printf("\n请初始化双向循环链表,以0结束!\n");
+	while (1){
+		pb = (DuLNode*)malloc(LEN1);
+		scanf_s("%d", &(pb->data));
+		if (pb->data!=0){
+			tail->next = pb;
+			pb->prior = tail;
+			tail = tail->next;
+		}
+		else{
+			tail->next = L;
+			L->prior = tail;
+			break;
+		}
+	}
+	return head;
+}
+void Show_DuLNode(DuLNode *L){
+	DuLNode *head, *pb;
+	head = L;
+	pb = head->next;
+	if (pb==head){
+		printf("\n该表为空表!\n");
+	}
+	while (pb!=head){
+		printf("%d\t", (pb->data));
+		pb = pb->next;
+	}
+	printf("\n");
+}
+void *change(DuLNode *L,DuLNode *p){
+	DuLNode *head = L;
+	DuLNode *pre = p->prior, *next = p->next;
+	if (p->prior==head){
+		printf("\n交换位置有误!\n");
+	}
+	if (pre->prior==head){
+		DuLNode *ppre = pre->prior;
+		//L = pre->prior;
+		p->prior = p->prior->prior;
+		pre->prior = p;
+		pre->next = next;
+		next->prior = pre;
+		p->next = pre;
+		//特别注明
+		//next->next = p;
+		ppre->next = p;
+	}
+	else{
+		DuLNode *ppre = pre->prior;
+		p->prior = p->prior->prior;
+		pre->prior = p;
+		pre->next = next;
+		next->prior = pre;
+		p->next = pre;
+		ppre->next = p;
+	}
+}
+void main(){
+	DuLNode *L1=NULL;
+	L1 = init_double_List(L1);
+	Show_DuLNode(L1);
+	DuLNode *p = L1->next->next->next->next;
+	change(L1,p);
+	Show_DuLNode(L1);
+}
