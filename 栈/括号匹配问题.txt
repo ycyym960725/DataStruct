@@ -1,0 +1,37 @@
+Status Matching(LinkStack *s){
+	int flag = 1;
+	char x;
+	char sign;
+	scanf_s("%c", &sign);
+	while (sign!='#'&&flag){
+		switch (sign){
+		case '[' || '(':Push(s, sign); break;
+		case ']':{
+					 if (GetTop(s,&x)&&x=='['){
+						 Pop(s, &x);
+						 break;
+					 }
+					 else{
+						 flag = 0;
+						 break;
+					 }
+		}
+		case ')':{
+					 if (GetTop(s,&x)&&x=='('){
+						 Pop(s, &x);
+						 break;
+					 }
+					 else{
+						 flag = 0;
+						 break;
+					 }
+		}
+			scanf_s("%c", &sign);
+		}
+		if (IsEmptyLinkStack(s)&&flag){
+			return OK;
+		}
+		else{
+			return ERROR;
+		}
+}
